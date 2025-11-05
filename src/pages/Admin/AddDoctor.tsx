@@ -20,50 +20,6 @@ const AddDoctor = () => {
 
   const {backendUrl , aToken} = useContext(AdminContext)
 
-  // const onSubmitHandler = async (event) => {
-  //   event.preventDefault()
-
-  //   try{
-
-  //     if (!docImg) {
-  //       return toast.error('Image not selected')
-  //     }
-
-  //     const formData = new FormData()
-
-  //     formData.append('image', docImg)
-  //     formData.append('name', name)
-  //     formData.append('email', email)
-  //     formData.append('password', password)
-  //     formData.append('experience', experience)
-  //     formData.append('fees',Number(fees))
-  //     formData.append('about', about)
-  //     formData.append('speciality', speciality)
-  //     formData.append('degree', degree)
-  //     formData.append('address',JSON.stringify({line1:address1 , line2:address2}))
-
-  //     // console log formData
-  //     formData.forEach((value , key) => {
-  //       console.log(`${key} : ${value}`);
-  //     })
-
-  //     const { data } = await axios.post(
-  //       `${backendUrl}/api/v1/admin/add-doctor`,
-  //       formData,
-  //       { headers: { atoken: aToken } }
-  //     );
-
-  //     if (data.success) {
-  //       toast.success(data.message)
-  //     }else {
-  //       toast.error(data.message)
-  //     }
-
-  //   }catch (err){
-
-  //   }
-  // }
-
   const onSubmitHandler = async (event) => {
   event.preventDefault()
 
@@ -94,7 +50,7 @@ const AddDoctor = () => {
     formData.append('degree', degree)
     formData.append('address', JSON.stringify({line1: address1, line2: address2}))
 
-    // ⭐ CHECK WHAT HEADERS ARE BEING SENT
+  
     console.log('Sending headers:', { atoken: aToken });
 
     const { data } = await axios.post(
@@ -105,12 +61,10 @@ const AddDoctor = () => {
 
     if (data.success) {
       toast.success(data.message)
-      // Reset form
       setDocImg(false)
       setName('')
       setEmail('')
       setPassword('')
-      setExperience('1 Year')
       setFees('')
       setAbout('')
       setDegree('')
