@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react'
-import { assets } from '../assets/assets'
+import { useContext, useState } from 'react'
 import { AdminContext } from '../context/AdminContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -49,8 +48,9 @@ const Login = () => {
 
             }
 
-        }catch (err){
-
+        }catch (err: any){
+            console.error(err)
+            toast.error(err.message)
         }
     }
 
