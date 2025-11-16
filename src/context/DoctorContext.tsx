@@ -1,6 +1,6 @@
-import axios from "axios";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
+import { doctorCancelAppintmentsService, doctorCompleteAppintmentsService, getAppointmentsService, getDashDataService, getProfileDataService } from "../service/doctor";
 
 export const DoctorContext = createContext()
 
@@ -17,7 +17,8 @@ const DoctorContextProvider = (props) => {
 
         try {
 
-            const { data } = await axios.get(`${backendUrl}/api/v1/doctor/appointments` , {headers: {dtoken: dToken}} )
+            // const { data } = await axios.get(`${backendUrl}/api/v1/doctor/appointments` , {headers: {dtoken: dToken}} )
+            const data = await getAppointmentsService()
 
             if (data.success) {
                 setAppointments(data.appointments)
@@ -37,8 +38,9 @@ const DoctorContextProvider = (props) => {
 
         try {
 
-            const {data} = await axios.post(`${backendUrl}/api/v1/doctor/complete-appointment` , {appointmentId} , {headers: {dtoken : dToken}})
-            
+            // const {data} = await axios.post(`${backendUrl}/api/v1/doctor/complete-appointment` , {appointmentId} , {headers: {dtoken : dToken}})
+            const data = await doctorCompleteAppintmentsService(appointmentId)
+
             if (data.success) {
                 toast.success(data.message)
                 getAppointments()
@@ -57,8 +59,9 @@ const DoctorContextProvider = (props) => {
 
         try {
 
-            const {data} = await axios.post(`${backendUrl}/api/v1/doctor/cancel-appointment` , {appointmentId} , {headers: {dtoken : dToken}})
-            
+            // const {data} = await axios.post(`${backendUrl}/api/v1/doctor/cancel-appointment` , {appointmentId} , {headers: {dtoken : dToken}})
+            const data = await doctorCancelAppintmentsService(appointmentId)
+
             if (data.success) {
                 toast.success(data.message)
                 getAppointments()
@@ -77,7 +80,9 @@ const DoctorContextProvider = (props) => {
 
         try {
 
-            const {data} = await axios.get(`${backendUrl}/api/v1/doctor/dashboard`, {headers: {dtoken : dToken}})
+            // const {data} = await axios.get(`${backendUrl}/api/v1/doctor/dashboard`, {headers: {dtoken : dToken}})
+            const data = await getDashDataService()
+
             if (data.success) {
                 setDashData(data.dashData)
                 console.log(data.dashData)
@@ -96,7 +101,8 @@ const DoctorContextProvider = (props) => {
 
         try {
 
-            const {data} = await axios.get(`${backendUrl}/api/v1/doctor/profile` , {headers: {dtoken : dToken}})
+            // const {data} = await axios.get(`${backendUrl}/api/v1/doctor/profile` , {headers: {dtoken : dToken}})
+            const data = await getProfileDataService()
 
             if (data.success) {
                 setProfileData(data.profileData)

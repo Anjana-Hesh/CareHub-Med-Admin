@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DoctorContext } from '../../context/DoctorContext'
 import { AppContext } from '../../context/AppContext'
-import axios from 'axios'
 import { toast } from 'react-toastify'
+import { updateDoctorService } from '../../service/doctor'
 
 const DoctorProfile = () => {
 
@@ -15,13 +15,14 @@ const DoctorProfile = () => {
 
     try {
 
-      const updateDate = {
+      const updateData = {
         address: profileData.address,
         fees: profileData.fees,
         available: profileData.available
       }
 
-      const { data } = await axios.post(`${backendUrl}/api/v1/doctor/update-profile` , updateDate , {headers:{dtoken: dToken}})
+      // const { data } = await axios.post(`${backendUrl}/api/v1/doctor/update-profile` , updateData , {headers:{dtoken: dToken}})
+      const data = await updateDoctorService(updateData)
 
       if (data.success) {
         toast.success(data.message)

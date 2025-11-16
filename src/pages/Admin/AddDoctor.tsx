@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { assets } from '../../assets/assets'
 import { AdminContext } from '../../context/AdminContext'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import { addDoctorService } from '../../service/admin'
 
 const AddDoctor = () => {
 
@@ -21,69 +21,71 @@ const AddDoctor = () => {
   const {backendUrl , aToken} = useContext(AdminContext)
 
   const onSubmitHandler = async (event) => {
-  event.preventDefault()
+    event.preventDefault()
 
-  try {
-    // ⭐ ADD THESE DEBUG LOGS
-    console.log('aToken value:', aToken);
-    console.log('aToken type:', typeof aToken);
-    console.log('localStorage token:', localStorage.getItem('atoken'));
+    try {
+      
+      console.log('aToken value:', aToken);
+      console.log('aToken type:', typeof aToken);
+      console.log('localStorage token:', localStorage.getItem('atoken'));
+      
+      if (!aToken) {
+        return toast.error('Please login first')
+      }
+
+      if (!docImg) {
+        return toast.error('Image not selected')
+      }
+
+      const formData = new FormData()
+
+      formData.append('image', docImg)
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('password', password)
+      formData.append('experience', experience)
+      formData.append('fees', Number(fees))
+      formData.append('about', about)
+      formData.append('speciality', speciality)
+      formData.append('degree', degree)
+      formData.append('address', JSON.stringify({line1: address1, line2: address2}))
+
     
-    if (!aToken) {
-      return toast.error('Please login first')
+      console.log('Sending headers:', { atoken: aToken });
+
+      // const { data } = await axios.post(
+      //   `${backendUrl}/api/v1/admin/add-doctor`,
+      //   formData,
+      //   { headers: { atoken: aToken } }
+      // );
+
+      const data = await addDoctorService(formData)
+
+      if (data.success) {
+        toast.success(data.message)
+        setDocImg(false)
+        setName('')
+        setEmail('')
+        setPassword('')
+        setFees('')
+        setAbout('')
+        setDegree('')
+        setAddress1('')
+        setAddress2('')
+      } else {
+        toast.error(data.message)
+      }
+
+    } catch (err) {
+      console.error('Full error:', err);
+      console.error('Error response:', err.response);
+      
+      if (err.response?.status === 401) {
+        toast.error(err.response?.data?.message || 'Session expired. Please login again.');
+      } else {
+        toast.error('Failed to add doctor');
+      }
     }
-
-    if (!docImg) {
-      return toast.error('Image not selected')
-    }
-
-    const formData = new FormData()
-
-    formData.append('image', docImg)
-    formData.append('name', name)
-    formData.append('email', email)
-    formData.append('password', password)
-    formData.append('experience', experience)
-    formData.append('fees', Number(fees))
-    formData.append('about', about)
-    formData.append('speciality', speciality)
-    formData.append('degree', degree)
-    formData.append('address', JSON.stringify({line1: address1, line2: address2}))
-
-  
-    console.log('Sending headers:', { atoken: aToken });
-
-    const { data } = await axios.post(
-      `${backendUrl}/api/v1/admin/add-doctor`,
-      formData,
-      { headers: { atoken: aToken } }
-    );
-
-    if (data.success) {
-      toast.success(data.message)
-      setDocImg(false)
-      setName('')
-      setEmail('')
-      setPassword('')
-      setFees('')
-      setAbout('')
-      setDegree('')
-      setAddress1('')
-      setAddress2('')
-    } else {
-      toast.error(data.message)
-    }
-
-  } catch (err) {
-    console.error('Full error:', err);
-    console.error('Error response:', err.response);
-    
-    if (err.response?.status === 401) {
-      toast.error(err.response?.data?.message || 'Session expired. Please login again.');
-    } else {
-      toast.error('Failed to add doctor');
-    }
-  }
 }
 
   return (
