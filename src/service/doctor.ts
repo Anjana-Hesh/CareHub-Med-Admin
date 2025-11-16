@@ -95,3 +95,9 @@ export const updateDoctorService = async (updateDate) => {
 
     return resp.data;
 }
+
+export const docLogin = async (email: string , password: string) => {
+    const resp = await api.post("/doctor/login" , {email , password})    // base url athi bawin ethnin passe kotasa methnadi diya hakiya
+
+    return resp.data
+}

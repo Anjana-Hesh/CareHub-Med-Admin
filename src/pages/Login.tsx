@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react'
 import { AdminContext } from '../context/AdminContext'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { DoctorContext } from '../context/DoctorContext'
+import { docLogin } from '../service/doctor'
+import { adminLogin } from '../service/admin'
 
 
 const Login = () => {
@@ -21,7 +22,8 @@ const Login = () => {
 
             if (state === 'Admin') {
 
-                const { data } = await axios.post(`${backendUrl}/api/v1/admin/login`, { email, password })
+                // const { data } = await axios.post(`${backendUrl}/api/v1/admin/login`, { email, password })
+                const data = await adminLogin(email , password)
 
                 if (data.success) {
                     console.log(data.token)
@@ -34,7 +36,8 @@ const Login = () => {
 
             }else {
 
-                const {data} = await axios.post(`${backendUrl}/api/v1/doctor/login` , {email , password})
+                // const {data} = await axios.post(`${backendUrl}/api/v1/doctor/login` , {email , password})
+                const data = await docLogin(email , password)
 
                 if (data.success) {
                     console.log(data.token)
